@@ -1,5 +1,5 @@
 export function Lesson() {
-  return(
+  return (
     <h1>Lesson</h1>
-  )
+  );
 }

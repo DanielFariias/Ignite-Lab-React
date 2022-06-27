@@ -1,5 +1,5 @@
 export function Header() {
-  return(
+  return (
     <h1>Header</h1>
-  )
+  );
 }

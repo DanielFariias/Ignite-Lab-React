@@ -1,5 +1,5 @@
 export function Video() {
-  return(
+  return (
     <h1>Video</h1>
-  )
+  );
 }
