@@ -1,50 +1,26 @@
 import { DefaultUi, Player, Youtube } from '@vime/react';
 import {
-  CaretRight, DiscordLogo, FileArrowDown, Lightning,
+  CaretRight,
+  DiscordLogo,
+  FileArrowDown,
+  Lightning,
 } from 'phosphor-react';
 
 import '@vime/core/themes/default.css';
-import { gql, useQuery } from '@apollo/client';
+
+import { useGetLessonBySlugQuery } from '../graphql/generated';
 
 interface VideoProps {
   lessonSlug: string
 }
 
-interface GetLessonBrSlugResponse {
-  lesson: {
-    title: string
-    description: string
-    videoId: string
-    teacher: {
-      bio: string
-      avatarURL: string
-      name: string
-    }
-  }
-}
-
-const GET_LESSON_BY_SLUG_QUERY = gql`
-  query GetLessonBySlug($slug: String) {
-    lesson(where: {slug: $slug}) {
-      title
-      description
-      videoId
-      teacher {
-        bio
-        avatarURL
-        name
-      }
-    }
-  }
-`;
-
 export function Video({ lessonSlug }:VideoProps) {
-  const { data } = useQuery<GetLessonBrSlugResponse>(GET_LESSON_BY_SLUG_QUERY, {
+  const { data } = useGetLessonBySlugQuery({
     variables: {
       slug: lessonSlug,
     },
   });
-  if (!data) {
+  if (!data || !data.lesson) {
     return (
       <div className="flex-1">Carregando...</div>
     );
@@ -70,6 +46,7 @@ export function Video({ lessonSlug }:VideoProps) {
               {data.lesson.description}
             </p>
 
+            {data.lesson.teacher && (
             <div className="flex items-center gap-4 mt-6">
               <img
                 className="h-16 w-16 rounded-full border-2 border-blue-500"
@@ -89,6 +66,7 @@ export function Video({ lessonSlug }:VideoProps) {
                 </span>
               </div>
             </div>
+            )}
           </div>
           <div className="flex flex-col gap-4">
             <a
